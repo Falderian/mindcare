@@ -1,5 +1,3 @@
----
-
 **Project Name: MindCareHub**
 
 **Concept:**
