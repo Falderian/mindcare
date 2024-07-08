@@ -1,6 +1,6 @@
 "use client";
-import { useRouter } from "next/navigation";
 import "reflect-metadata";
+import { useRouter } from "next/navigation";
 
 const App: React.FC = () => {
   const router = useRouter();

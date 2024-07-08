@@ -48,7 +48,7 @@ const RegisterPage = () => {
           Создайте новую учетную запись
         </Text>
         <Form.Item
-          name="username"
+          name="login"
           rules={[
             {
               required: true,
