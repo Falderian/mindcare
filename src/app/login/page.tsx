@@ -9,16 +9,10 @@ import {
   Divider,
   message,
 } from "antd";
-import {
-  UserOutlined,
-  LockOutlined,
-  GoogleOutlined,
-  FacebookOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import styles from "./login.module.scss";
-import Image from "next/image";
 
 const { Title, Text } = Typography;
 
@@ -67,7 +61,7 @@ const LoginPage = () => {
           rules={[
             {
               required: true,
-              message: "Пожалуйста, введите ваше имя пользователя!",
+              message: "Пожалуйста, введите ваше имя пользователя.",
             },
           ]}
         >
@@ -76,7 +70,7 @@ const LoginPage = () => {
         <Form.Item
           name="password"
           rules={[
-            { required: true, message: "Пожалуйста, введите ваш пароль!" },
+            { required: true, message: "Пожалуйста, введите ваш пароль." },
           ]}
         >
           <Input
@@ -94,6 +88,14 @@ const LoginPage = () => {
         <Form.Item>
           <Button type="primary" htmlType="submit" block loading={loading}>
             Войти
+          </Button>
+          <Button
+            onClick={() => router.push("register")}
+            block
+            loading={loading}
+            style={{ marginTop: 6 }}
+          >
+            Регистрация
           </Button>
         </Form.Item>
         <Divider>Войти с помощью</Divider>
