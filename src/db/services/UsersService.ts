@@ -10,7 +10,12 @@ export type TUser = {
 };
 
 export class UsersService {
-  async findUser({ login, email, id }: Partial<TUser>): Promise<TUser | null> {
+  findUser = async ({
+    login,
+    email,
+    id,
+    password,
+  }: Partial<TUser>): Promise<TUser | null> => {
     const clause = id ? "id = $1" : "login = $1 AND email = $2";
     const params = id ? [id] : [login, email];
     const query = `SELECT * FROM users WHERE ${clause};`;
@@ -21,13 +26,12 @@ export class UsersService {
       returnFirstRowOnly: true,
     });
     return result as TUser | null;
-  }
+  };
 
-  async registerUser({ login, email, password }: TUser): Promise<string> {
+  registerUser = async ({ login, email, password }: TUser): Promise<string> => {
     const existingUser = await this.findUser({ login, email });
     if (existingUser) {
-      throw createError(
-        409,
+      throw createError.Conflict(
         "Пользователь с таким логином или email уже существует."
       );
     } else {
@@ -39,5 +43,20 @@ export class UsersService {
       await executeQuery({ query, params });
       return "Регистрация успешна!";
     }
-  }
+  };
+
+  loginUser = async ({
+    login,
+    password,
+  }: Pick<TUser, "login" | "password">) => {
+    console.log(login, password);
+    const existingUser = await this.findUser({ login, password });
+    if (existingUser) {
+      console.log(existingUser);
+    } else {
+      throw createError.Conflict(
+        "Пользователь с таким логином и паролем не найден"
+      );
+    }
+  };
 }

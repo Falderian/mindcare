@@ -15,4 +15,16 @@ export class UsersController {
     }
     return this.usersService.registerUser({ login, email, password });
   };
+
+  static login = async (req: NextRequest) => {
+    const { login, password } = await req.json();
+    if (!login || !password) {
+      throw createError(
+        400,
+        "Отсутствуют обязательные поля: login или password"
+      );
+    } else {
+      return await this.usersService.loginUser({ login, password });
+    }
+  };
 }

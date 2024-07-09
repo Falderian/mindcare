@@ -18,9 +18,8 @@ const RegisterPage = () => {
       const response = await axios.post("/api/users/register", values);
       message.success("Регистрация выполнена успешно!");
       router.push("/login");
-    } catch (error) {
-      console.log(error);
-      message.error("Ошибка регистрации. Пожалуйста, попробуйте снова.");
+    } catch (error: any) {
+      message.error(error.response.data.error);
     } finally {
       setLoading(false);
     }

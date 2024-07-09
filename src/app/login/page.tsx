@@ -23,13 +23,10 @@ const LoginPage = () => {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      const response = await axios.post("/api/login", values);
+      const response = await axios.post("/api/users/login", values);
       message.success("Вход выполнен успешно!");
-      router.push("/dashboard");
-    } catch (error) {
-      message.error(
-        "Ошибка входа. Проверьте свои учетные данные и попробуйте снова."
-      );
+    } catch (error: any) {
+      message.error(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +54,7 @@ const LoginPage = () => {
           Войдите в свою учетную запись
         </Text>
         <Form.Item
-          name="username"
+          name="login"
           rules={[
             {
               required: true,
