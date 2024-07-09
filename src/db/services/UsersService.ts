@@ -1,5 +1,4 @@
 import { executeQuery } from "../db.config";
-import { QueryResultRow } from "pg";
 import createError from "http-errors";
 
 export type TUser = {

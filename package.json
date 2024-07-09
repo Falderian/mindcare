@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/cache": "^11.11.0",
+    "@mui/material-nextjs": "^5.15.11",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "http-errors": "^2.0.0",
@@ -22,7 +24,6 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
-    "@ant-design/nextjs-registry": "latest",
     "@types/bcrypt": "^5.0.2",
     "@types/http-errors": "^2.0.4",
     "@types/node": "^20",
