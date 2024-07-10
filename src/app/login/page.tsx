@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import styles from "./login.module.scss";
+import { Box } from "@mui/material";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ const LoginPage = () => {
     }
   };
 
-  return <div className={styles.container}>login</div>;
+  return <Box>Login</Box>;
 };
 
 export default LoginPage;
