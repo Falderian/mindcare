@@ -1,17 +1,37 @@
-"use client";
-import { PT_Sans } from "next/font/google";
-import { createTheme } from "@mui/material/styles";
+import { PaletteMode } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import { Neucha, Great_Vibes } from 'next/font/google';
 
-const ptSans = PT_Sans({
-  weight: ["400", "700"], // Only include valid weights
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
+const neucha = Neucha({
+  weight: ['400'],
+  subsets: ['latin', 'cyrillic'],
+  display: 'swap',
 });
 
-const theme = createTheme({
-  typography: {
-    fontFamily: ptSans.style.fontFamily,
-  },
+const greatVibes = Great_Vibes({
+  weight: ['400'],
+  subsets: ['latin'],
+  display: 'swap',
 });
 
-export default theme;
+const createMyTheme = (mode: PaletteMode) =>
+  createTheme({
+    palette: {
+      mode,
+      background: {
+        default: mode === 'light' ? '#F8F7FA' : '#121212',
+      },
+      text: {
+        primary: mode === 'light' ? '#1a1a1a' : '#ffffff',
+      },
+    },
+    typography: {
+      fontFamily: neucha.style.fontFamily,
+      fontSize: 16,
+      h4: {
+        fontFamily: greatVibes.style.fontFamily,
+      },
+    },
+  });
+
+export { createMyTheme };
