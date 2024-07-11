@@ -1,6 +1,13 @@
 "use client";
-import { Fade, Paper, Stack, TextField, Typography } from "@mui/material";
-import Image from "next/image";
+import {
+  Box,
+  Button,
+  Fade,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import AuthIllustrationV1Wrapper from "../../components/layouts/AuthIllustrationV1Wrapper";
 
@@ -12,7 +19,19 @@ type TForm = {
 };
 
 const RegisterPage = () => {
-  const { control } = useForm<TForm>();
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<TForm>();
+
+  const submit = (data: TForm) => {
+    console.log(data);
+  };
+
+  const password = watch("password");
+
   return (
     <Fade in={true}>
       <Stack
@@ -32,63 +51,101 @@ const RegisterPage = () => {
               flexDirection: "column",
               alignItems: "center",
             }}
+            elevation={3}
           >
-            <svg
-              width="100"
-              height="100"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="50"
-                cy="50"
-                r="48"
-                stroke="#3B82F6"
-                stroke-width="2"
-                fill="#34D399"
-              />
-              <path
-                d="M50 25C61.0457 25 70 33.9543 70 45C70 56.0457 61.0457 65 50 65C38.9543 65 30 56.0457 30 45C30 33.9543 38.9543 25 50 25ZM50 45L45 50L50 55L55 50L50 45Z"
-                fill="white"
-              />
-              <path
-                d="M55 38C56.6569 38 58 36.6569 58 35C58 33.3431 56.6569 32 55 32C53.3431 32 52 33.3431 52 35C52 36.6569 53.3431 38 55 38Z"
-                fill="#10B981"
-              />
-              <path
-                d="M45 38C46.6569 38 48 36.6569 48 35C48 33.3431 46.6569 32 45 32C43.3431 32 42 33.3431 42 35C42 36.6569 43.3431 38 45 38Z"
-                fill="#10B981"
-              />
-            </svg>
-
             <Typography variant="h6">MindCare</Typography>
-            <Typography variant="h6">Регистрация</Typography>
-            <Controller
-              name="login"
-              control={control}
-              render={({ field, fieldState, formState }) => <TextField />}
-            />
-            <Controller
-              name="email"
-              control={control}
-              render={({ field, fieldState, formState }) => (
-                <TextField type="email" />
-              )}
-            />
-            <Controller
-              name="login"
-              control={control}
-              render={({ field, fieldState, formState }) => (
-                <TextField type="password" />
-              )}
-            />
-            <Controller
-              name="login"
-              control={control}
-              render={({ field, fieldState, formState }) => (
-                <TextField type="password" />
-              )}
-            />
+            <Typography variant="h5">Регистрация</Typography>
+            <Box
+              component="form"
+              display="flex"
+              gap={2}
+              flexDirection="column"
+              width="100%"
+              onSubmit={handleSubmit(submit)}
+            >
+              <Controller
+                name="login"
+                control={control}
+                rules={{ required: "Логин обязателен для заполнения" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="standard"
+                    label="Логин"
+                    fullWidth
+                    error={!!errors.login}
+                    helperText={errors.login ? errors.login.message : null}
+                  />
+                )}
+              />
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: "Почтовый ящик обязателен для заполнения",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Некорректный формат почтового ящика",
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="standard"
+                    type="email"
+                    label="Почтовый ящик"
+                    fullWidth
+                    error={!!errors.email}
+                    helperText={errors.email ? errors.email.message : null}
+                  />
+                )}
+              />
+              <Controller
+                name="password"
+                control={control}
+                rules={{ required: "Пароль обязателен для заполнения" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="standard"
+                    type="password"
+                    label="Пароль"
+                    fullWidth
+                    error={!!errors.password}
+                    helperText={
+                      errors.password ? errors.password.message : null
+                    }
+                  />
+                )}
+              />
+              <Controller
+                name="passwordConfirm"
+                control={control}
+                rules={{
+                  required: "Подтверждение пароля обязательно для заполнения",
+                  validate: (value) =>
+                    value === password || "Пароли должны совпадать",
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="standard"
+                    type="password"
+                    label="Повторите пароль"
+                    fullWidth
+                    error={!!errors.passwordConfirm}
+                    helperText={
+                      errors.passwordConfirm
+                        ? errors.passwordConfirm.message
+                        : null
+                    }
+                  />
+                )}
+              />
+              <Button type="submit" variant="contained">
+                Зарегистрироваться
+              </Button>
+            </Box>
           </Paper>
         </AuthIllustrationV1Wrapper>
       </Stack>
