@@ -1,31 +1,47 @@
-import { message } from "antd";
-import { AxiosError } from "axios";
-import { useCallback } from "react";
+import toast from 'react-hot-toast';
+import { getAxiosErrMessage } from '../utils/utils';
+import { AxiosError } from 'axios';
 
-const useNotify = () => {
-  const notifyFetch = useCallback(async <T,>(promise: Promise<T>) => {
-    try {
-      const result = await promise;
-      return result;
-    } catch (error) {
-      message.error(`Error: ${(error as Error).message}`, 2);
-    }
-  }, []);
-
-  const notifyPromise = useCallback(async <T,>(promise: Promise<T>) => {
-    const hideLoading = message.loading("Загрузка...", 0);
-    try {
-      const result = await promise;
-      hideLoading();
-      message.success("ОК!", 2);
-      return result;
-    } catch (error) {
-      hideLoading();
-      message.error(`Ошибка: ${(error as AxiosError).response?.data}`, 2);
-    }
-  }, []);
-
-  return { notifyFetch, notifyPromise };
+type NotifyPromiseOptions = {
+  promise: Promise<any>;
+  loadingMsg?: string;
+  successMsg?: string;
+  errorMsg?: string;
 };
 
-export default useNotify;
+export const useNotify = () => {
+  const notify = (msg: string) => toast(msg);
+
+  const handleError = (error: AxiosError, errorMsg?: string) => {
+    if (error.response?.status === 401) {
+      return '401';
+    } else {
+      return errorMsg ? errorMsg : getAxiosErrMessage(error);
+    }
+  };
+
+  const handlePromise = ({ promise, errorMsg }: Omit<NotifyPromiseOptions, 'loadingMsg'>) =>
+    promise.then((result) => result).catch((error) => Promise.reject(handleError(error as AxiosError, errorMsg)));
+
+  const notifyPromise = ({
+    promise,
+    loadingMsg = 'loading',
+    successMsg = 'success',
+    errorMsg = '',
+  }: NotifyPromiseOptions) => {
+    return toast.promise(handlePromise({ promise, errorMsg, successMsg }), {
+      loading: 'Загрузка...',
+      success: successMsg ?? 'OK',
+      error: (e) => getAxiosErrMessage(e),
+    });
+  };
+
+  const notifyFetch = async (promise: Promise<any>) => {
+    return promise.catch((error: AxiosError) => {
+      const errorMessage = handleError(error);
+      toast.error(errorMessage);
+    });
+  };
+
+  return { notifyPromise, notifyFetch, notify };
+};

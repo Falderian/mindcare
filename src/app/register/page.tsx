@@ -1,8 +1,13 @@
 'use client';
-import { Box, Button, Fade, Paper, Stack, TextField } from '@mui/material';
+import { Box, Button, Divider, Fade, IconButton, Paper, Stack, TextField, Typography } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import AuthIllustrationV1Wrapper from '../../components/layouts/AuthIllustrationV1Wrapper';
 import { AppLogo } from '../../components/AppLogo';
+import axios from 'axios';
+import { useNotify } from '../../hooks/useNotify';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Google } from '@mui/icons-material';
 
 type TForm = {
   login: string;
@@ -12,6 +17,8 @@ type TForm = {
 };
 
 const RegisterPage = () => {
+  const { notifyPromise } = useNotify();
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -20,7 +27,8 @@ const RegisterPage = () => {
   } = useForm<TForm>();
 
   const submit = (data: TForm) => {
-    console.log(data);
+    const promise = axios.post('/api/users/register', data).then(() => router.push('/login'));
+    notifyPromise({ promise });
   };
 
   const password = watch('password');
@@ -55,6 +63,7 @@ const RegisterPage = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    value={field.value}
                     variant="standard"
                     label="Логин"
                     fullWidth
@@ -76,6 +85,7 @@ const RegisterPage = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    value={field.value}
                     variant="standard"
                     label="Почтовый ящик"
                     fullWidth
@@ -91,6 +101,7 @@ const RegisterPage = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    value={field.value}
                     variant="standard"
                     type="password"
                     label="Пароль"
@@ -110,6 +121,7 @@ const RegisterPage = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    value={field.value}
                     variant="standard"
                     type="password"
                     label="Повторите пароль"
@@ -122,6 +134,23 @@ const RegisterPage = () => {
               <Button type="submit" variant="contained" sx={{ fontWeight: 700 }}>
                 Зарегистрироваться
               </Button>
+              <Typography>
+                У вас уже есть аккаунт? <Link href="login">Войти</Link>
+              </Typography>
+              <Divider
+                sx={{
+                  '&::before, &::after': {
+                    borderColor: 'primary.light',
+                  },
+                }}
+              >
+                или
+              </Divider>
+              <Box display="flex" justifyContent="center">
+                <IconButton color="error" size="small">
+                  <Google />
+                </IconButton>
+              </Box>
             </Box>
           </Paper>
         </AuthIllustrationV1Wrapper>

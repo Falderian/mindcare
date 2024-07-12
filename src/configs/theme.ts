@@ -19,7 +19,8 @@ const createMyTheme = (mode: PaletteMode) =>
     palette: {
       mode,
       background: {
-        default: mode === 'light' ? '#F8F7FA' : '#121212',
+        default: mode === 'light' ? '#F8F7FA' : '#25293C',
+        paper: mode === 'light' ? '#FFFFFF' : '#2F3349',
       },
       text: {
         primary: mode === 'light' ? '#1a1a1a' : '#ffffff',
