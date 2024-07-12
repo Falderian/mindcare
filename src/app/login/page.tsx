@@ -1,24 +1,121 @@
-"use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { Box } from "@mui/material";
+'use client';
+import { Box, Button, Divider, Fade, IconButton, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import AuthIllustrationV1Wrapper from '../../components/layouts/AuthIllustrationV1Wrapper';
+import { AppLogo } from '../../components/AppLogo';
+import axios from 'axios';
+import { useNotify } from '../../hooks/useNotify';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Google } from '@mui/icons-material';
+
+type TForm = {
+  login: string;
+  password: string;
+};
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+  const { notifyPromise } = useNotify();
   const router = useRouter();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TForm>();
 
-  const onFinish = async (values: any) => {
-    setLoading(true);
-    try {
-      const response = await axios.post("/api/users/login", values);
-    } catch (error: any) {
-    } finally {
-      setLoading(false);
-    }
+  const submit = (data: TForm) => {
+    const promise = axios.post('/api/users/login', data).then((res) => console.log(res));
+    notifyPromise({ promise });
   };
 
-  return <Box>Login</Box>;
+  return (
+    <Fade in={true}>
+      <Stack height="100vh" width="100vw" display="flex" justifyContent="center" alignItems="center">
+        <AuthIllustrationV1Wrapper zIndex={2}>
+          <Paper
+            sx={{
+              paddingY: 2,
+              padding: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+            elevation={3}
+          >
+            <AppLogo />
+            <Typography variant="h5" sx={{ mt: 2, mb: 1, fontWeight: 'bold', textAlign: 'center' }}>
+              Добро пожаловать! 👋🏻
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 3, textAlign: 'center', color: 'text.secondary' }}>
+              Пожалуйста, войдите в свою учетную запись
+            </Typography>
+            <Box
+              component="form"
+              display="flex"
+              gap={2}
+              flexDirection="column"
+              width="100%"
+              onSubmit={handleSubmit(submit)}
+            >
+              <Controller
+                name="login"
+                control={control}
+                rules={{ required: 'Логин обязателен для заполнения' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    value={field.value}
+                    variant="standard"
+                    label="Логин"
+                    fullWidth
+                    error={!!errors.login}
+                    helperText={errors.login ? errors.login.message : null}
+                  />
+                )}
+              />
+              <Controller
+                name="password"
+                control={control}
+                rules={{ required: 'Пароль обязателен для заполнения' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    value={field.value}
+                    variant="standard"
+                    type="password"
+                    label="Пароль"
+                    fullWidth
+                    error={!!errors.password}
+                    helperText={errors.password ? errors.password.message : null}
+                  />
+                )}
+              />
+              <Button type="submit" variant="contained" sx={{ fontWeight: 700 }}>
+                Войти
+              </Button>
+              <Typography color="secondary">
+                У вас нет аккаунта? <Link href="register">Зарегистрироваться</Link>
+              </Typography>
+              <Divider
+                sx={{
+                  '&::before, &::after': {
+                    borderColor: 'primary.light',
+                  },
+                }}
+              >
+                или
+              </Divider>
+              <Box display="flex" justifyContent="center">
+                <IconButton color="error" size="small">
+                  <Google />
+                </IconButton>
+              </Box>
+            </Box>
+          </Paper>
+        </AuthIllustrationV1Wrapper>
+      </Stack>
+    </Fade>
+  );
 };
 
 export default LoginPage;

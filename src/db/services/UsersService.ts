@@ -1,5 +1,7 @@
-import { executeQuery } from "../db.config";
-import createError from "http-errors";
+import { compareSync, hashSync } from 'bcrypt';
+import { executeQuery } from '../db.config';
+import createError from 'http-errors';
+import { QueryBuilder } from '../utils/QueryBuilder';
 
 export type TUser = {
   login: string;
@@ -9,15 +11,14 @@ export type TUser = {
 };
 
 export class UsersService {
-  findUser = async ({
-    login,
-    email,
-    id,
-    password,
-  }: Partial<TUser>): Promise<TUser | null> => {
-    const clause = id ? "id = $1" : "login = $1 AND email = $2";
-    const params = id ? [id] : [login, email];
-    const query = `SELECT * FROM users WHERE ${clause};`;
+  salt = 10;
+
+  findUser = async ({ login }: Partial<TUser>): Promise<TUser | null> => {
+    const clause = 'login = $1';
+    const params = [login];
+    const query = `
+      SELECT * FROM users WHERE ${clause};
+    `;
 
     const result = await executeQuery<TUser>({
       query,
@@ -27,35 +28,40 @@ export class UsersService {
     return result as TUser | null;
   };
 
-  registerUser = async ({ login, email, password }: TUser): Promise<string> => {
-    const existingUser = await this.findUser({ login, email });
+  registerUser = async ({ login, email, password }: TUser): Promise<null> => {
+    const existingUser = await this.findUser({ login });
     if (existingUser) {
-      throw createError.Conflict(
-        "Пользователь с таким логином или email уже существует."
-      );
+      throw createError.Conflict('Пользователь с таким логином или email уже существует.');
     } else {
       const query = `
         INSERT INTO users (login, email, password)
-        VALUES ($1, $2, $3)
+        VALUES ($1, $2, $3);
       `;
-      const params = [login, email, password];
+      const hashedPassword = this.hashPassword(password);
+      const params = [login, email, hashedPassword];
       await executeQuery({ query, params });
-      return "Регистрация успешна!";
+      return null;
     }
   };
 
-  loginUser = async ({
-    login,
-    password,
-  }: Pick<TUser, "login" | "password">) => {
-    console.log(login, password);
-    const existingUser = await this.findUser({ login, password });
+  loginUser = async ({ login, password }: Pick<TUser, 'login' | 'password'>) => {
+    const existingUser = await this.findUser({ login });
     if (existingUser) {
-      console.log(existingUser);
+      const isValidPassword = compareSync(password, existingUser?.password);
+      if (!isValidPassword) throw createError.Conflict('Неверный пароль');
+
+      const dto = {
+        last_login: new Date().toISOString(),
+        is_active: true,
+      };
+      const updateQuery = QueryBuilder.buildUpdateQuery('users', 'login', login, dto);
+      await executeQuery({ query: updateQuery });
+
+      return { ...existingUser, password: null };
     } else {
-      throw createError.Conflict(
-        "Пользователь с таким логином и паролем не найден"
-      );
+      throw createError.Conflict('Пользователь с таким логином не найден');
     }
   };
+
+  hashPassword = (password: string) => hashSync(password, this.salt);
 }

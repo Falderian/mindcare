@@ -134,7 +134,7 @@ const RegisterPage = () => {
               <Button type="submit" variant="contained" sx={{ fontWeight: 700 }}>
                 Зарегистрироваться
               </Button>
-              <Typography>
+              <Typography color="secondary">
                 У вас уже есть аккаунт? <Link href="login">Войти</Link>
               </Typography>
               <Divider
