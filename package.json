@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "npx prisma migrate dev && npx prisma generate"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -15,6 +16,7 @@
     "@mui/icons-material": "^5.16.0",
     "@mui/material": "^5.16.0",
     "@mui/material-nextjs": "^5.15.11",
+    "@prisma/client": "^5.16.2",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -41,6 +43,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
+    "prisma": "^5.16.2",
     "typescript": "^5"
   }
 }

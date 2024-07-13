@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import { Toaster } from 'react-hot-toast';
-import { Box, CssBaseline, Fab, IconButton, PaletteMode } from '@mui/material';
+import { CssBaseline, Fab, PaletteMode } from '@mui/material';
 import { createMyTheme } from '../configs/theme';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
+import { AuthProvider } from '../contexts/AuthContext';
 
 const RootLayout = ({ children }: React.PropsWithChildren) => {
   const [mode, setMode] = useState<PaletteMode>('light');
@@ -20,11 +21,13 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
       <body style={{ margin: 0 }}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Fab sx={{ position: 'absolute' }} onClick={toggleMode} size="small">
-              {mode === 'dark' ? <DarkModeOutlined /> : <LightModeOutlined />}
-            </Fab>
-            {children}
+            <AuthProvider>
+              <CssBaseline />
+              <Fab sx={{ position: 'absolute' }} onClick={toggleMode} size="small">
+                {mode === 'dark' ? <DarkModeOutlined /> : <LightModeOutlined />}
+              </Fab>
+              {children}
+            </AuthProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
         <Toaster />

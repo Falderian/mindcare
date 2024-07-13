@@ -13,6 +13,7 @@ export const useNotify = () => {
   const notify = (msg: string) => toast(msg);
 
   const handleError = (error: AxiosError, errorMsg?: string) => {
+    console.error(error);
     return errorMsg || getAxiosErrMessage(error);
   };
 

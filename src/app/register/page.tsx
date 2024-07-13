@@ -24,7 +24,14 @@ const RegisterPage = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<TForm>();
+  } = useForm<TForm>({
+    defaultValues: {
+      login: 'test@test.com',
+      email: 'test@test.com',
+      password: 'test@test.com',
+      passwordConfirm: 'test@test.com',
+    },
+  });
 
   const submit = (data: TForm) => {
     const promise = axios.post('/api/users/register', data).then(() => router.push('/login'));

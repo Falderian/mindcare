@@ -1,10 +1,10 @@
-"use client";
-import "reflect-metadata";
-import { useRouter } from "next/navigation";
+'use client';
+import { useRouter } from 'next/navigation';
+import 'reflect-metadata';
 
 const App: React.FC = () => {
   const router = useRouter();
-  router.push("login");
+  router.push('login');
   return <div></div>;
 };
 

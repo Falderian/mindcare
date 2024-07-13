@@ -8,6 +8,9 @@ import { useNotify } from '../../hooks/useNotify';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Google } from '@mui/icons-material';
+import { setCookie } from 'cookies-next';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
 
 type TForm = {
   login: string;
@@ -16,15 +19,20 @@ type TForm = {
 
 const LoginPage = () => {
   const { notifyPromise } = useNotify();
+  const { setUser } = useContext(AuthContext);
   const router = useRouter();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<TForm>();
+  } = useForm<TForm>({ defaultValues: { login: 'test@test.com', password: 'test@test.com' } });
 
   const submit = (data: TForm) => {
-    const promise = axios.post('/api/users/login', data).then((res) => console.log(res));
+    const promise = axios.post('/api/users/login', data).then(({ data }) => {
+      const { user, session } = data;
+      setCookie('sessionId', session.id, { expires: new Date(session.expires_at) });
+      setUser?.(user);
+    });
     notifyPromise({ promise });
   };
 
