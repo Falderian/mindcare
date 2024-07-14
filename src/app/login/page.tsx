@@ -32,6 +32,7 @@ const LoginPage = () => {
       const { user, session } = data;
       setCookie('sessionId', session.id, { expires: new Date(session.expires_at) });
       setUser?.(user);
+      router.push('patients');
     });
     notifyPromise({ promise });
   };
