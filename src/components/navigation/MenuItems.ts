@@ -1,5 +1,9 @@
 export const MenuItems = [
-  { name: 'patients', path: 'patients' },
+  {
+    name: 'Консультации',
+    path: 'consultations',
+    icon: 'fluent:people-chat-16-regular',
+  },
   {
     name: 'documentation',
     path: 'documentation',
