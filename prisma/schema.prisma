@@ -7,25 +7,35 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model User {
-  id         Int      @id @default(autoincrement())
-  login      String   @unique
-  email      String   @unique
-  password   String
-  first_name String?
-  last_name  String?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  last_login DateTime @default(now())
-  is_active  Boolean  @default(true)
-  session    Session? @relation("UserSession")
+  id           Int            @id @default(autoincrement())
+  login        String         @unique
+  email        String         @unique
+  password     String
+  first_name   String?
+  last_name    String?
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  last_login   DateTime       @default(now())
+  is_active    Boolean        @default(true)
+  Session      Session?
+  Consultation Consultation[]
 }
 
 model Session {
-  id        String    @id
-  user      User   @relation("UserSession", fields: [user_id], references: [id])
-  user_id   Int    @unique
+  id         String   @id
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int      @unique
   created_at DateTime @default(now())
   expires_at DateTime @default(dbgenerated("now() + interval '1 day'"))
+}
+
+model Consultation {
+  id         Int      @id @default(autoincrement())
+  type       String   @default("online")
+  completed  Boolean  @default(false)
+  startTime  DateTime
+  created_at DateTime @default(now())
+  userId     Int?
+  User       User?    @relation(fields: [userId], references: [id])
 }

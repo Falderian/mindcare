@@ -31,7 +31,7 @@ const LoginPage = () => {
     const promise = axios.post('/api/users/login', data).then(({ data }) => {
       const { user, session } = data;
       setCookie('sessionId', session.id, { expires: new Date(session.expires_at) });
-      setUser?.(user);
+      setUser!(user);
       router.push('patients');
     });
     notifyPromise({ promise });

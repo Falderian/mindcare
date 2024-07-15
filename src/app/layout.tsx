@@ -8,6 +8,7 @@ import { createMyTheme } from '../configs/theme';
 import { DarkModeOutlined, LightModeOutlined } from '@mui/icons-material';
 import { NavigationMenu } from '../components/navigation/NavigationMenu';
 import { usePathname } from 'next/navigation';
+import { AuthProvider } from '../contexts/AuthContext';
 
 const RootLayout = ({ children }: React.PropsWithChildren) => {
   const [mode, setMode] = useState<PaletteMode>('light');
@@ -26,16 +27,18 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
       <body style={{ margin: 0 }}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Stack direction="row">
-              {showNavigationMenu && <NavigationMenu />}
-              <Box width="70%">
-                <Fab sx={{ position: 'absolute', right: 0 }} onClick={toggleMode} size="small">
-                  {mode === 'dark' ? <DarkModeOutlined /> : <LightModeOutlined />}
-                </Fab>
-                {children}
-              </Box>
-            </Stack>
+            <AuthProvider>
+              <CssBaseline />
+              <Stack direction="row">
+                {showNavigationMenu && <NavigationMenu />}
+                <Box width="70%">
+                  <Fab sx={{ position: 'absolute', right: 0 }} onClick={toggleMode} size="small">
+                    {mode === 'dark' ? <DarkModeOutlined /> : <LightModeOutlined />}
+                  </Fab>
+                  {children}
+                </Box>
+              </Stack>
+            </AuthProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
         <Toaster />
