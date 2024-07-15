@@ -1,9 +1,5 @@
 export const MenuItems = [
-  {
-    name: 'Консультации',
-    path: 'consultations',
-    icon: 'fluent:people-chat-16-regular',
-  },
+  { name: 'Планировщик', path: 'scheduler', icon: 'ant-design:schedule-outlined' },
   {
     name: 'documentation',
     path: 'documentation',
@@ -11,5 +7,10 @@ export const MenuItems = [
       { name: 'treatments', path: 'treatments' },
       { name: 'consultations', path: 'consultations' },
     ],
+  },
+  {
+    name: 'Консультации',
+    path: 'consultations',
+    icon: 'fluent:people-chat-16-regular',
   },
 ];
