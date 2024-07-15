@@ -15,9 +15,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (getCookie('sessionId') || !user) {
-      router.push('login');
-    } else axios.get('api/users/login/').then((res) => console.log(res));
+    const checkSessionAndFetchUser = async () => {
+      const sessionExists = getCookie('sessionId');
+
+      if (!sessionExists || !user) {
+        router.push('login');
+      } else {
+        try {
+          const response = await axios.get('api/users/login/');
+          console.log(response);
+        } catch (error) {
+          console.error('Failed to fetch user:', error);
+        }
+      }
+    };
+
+    checkSessionAndFetchUser();
   }, [router]);
 
   return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;

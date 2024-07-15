@@ -1,11 +1,11 @@
 export const MenuItems = [
-  { name: 'Планировщик', path: 'scheduler', icon: 'ant-design:schedule-outlined' },
+  { name: 'Планировщик', path: '', icon: 'ant-design:schedule-outlined' },
   {
     name: 'documentation',
-    path: 'documentation',
+    path: '',
     children: [
-      { name: 'treatments', path: 'treatments' },
-      { name: 'consultations', path: 'consultations' },
+      { name: 'treatments', path: '' },
+      { name: 'consultations', path: '' },
     ],
   },
   {

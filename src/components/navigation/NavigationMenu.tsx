@@ -39,6 +39,9 @@ export const NavigationMenu: React.FC = () => {
                 alignItems: 'center',
                 backgroundColor: isActive(item.path) ? 'primary.main' : 'transparent',
                 color: isActive(item.path) ? 'primary.contrastText' : 'inherit',
+                '&:hover': {
+                  backgroundColor: isActive(item.path) ? 'primary.main' : '', // Keep the background the same if active
+                },
               }}
             >
               {item.icon && <IconifyIcon icon={item.icon} />}
