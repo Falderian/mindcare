@@ -1,22 +1,13 @@
 'use client';
-import { Box } from '@mui/material';
-import { useAuth } from '../../hooks/useAuth';
-import { useEffect } from 'react';
-import { useNotify } from '../../hooks/useNotify';
-import axios from 'axios';
+import { Consultation } from '@prisma/client';
+import MUIDataTable from 'mui-datatables';
 
-const ConsulationsPage = () => {
-  const { user } = useAuth();
-  const { notifyFetch } = useNotify();
+type Props = {
+  consultations: Consultation[];
+};
 
-  useEffect(() => {
-    if (user) {
-      const promise = axios.get('/api/consultations/' + user?.id).then((res) => console.log(res));
-      notifyFetch(promise);
-    }
-  }, []);
-
-  return <Box>Consultations</Box>;
+const ConsulationsPage = ({ consultations }: Props) => {
+  return <MUIDataTable columns={[]} data={consultations ?? []} title={'Консультации'} />;
 };
 
 export default ConsulationsPage;
