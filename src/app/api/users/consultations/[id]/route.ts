@@ -1,7 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 
-const getUserConsultations = async (req: NextApiRequest, res: NextApiResponse) => {
+const getUserConsultations = async (req: Request, res: Response) => {
   if (req.method === 'GET') {
     console.log(req);
   } else
