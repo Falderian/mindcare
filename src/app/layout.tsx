@@ -31,7 +31,7 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
               <CssBaseline />
               <Stack direction="row">
                 {showNavigationMenu && <NavigationMenu />}
-                <Box width="70%">
+                <Box width="70%" padding={4}>
                   <Fab sx={{ position: 'absolute', right: 0 }} onClick={toggleMode} size="small">
                     {mode === 'dark' ? <DarkModeOutlined /> : <LightModeOutlined />}
                   </Fab>

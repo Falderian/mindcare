@@ -36,6 +36,6 @@ model Consultation {
   completed  Boolean  @default(false)
   startTime  DateTime
   created_at DateTime @default(now())
-  userId     Int?
-  User       User?    @relation(fields: [userId], references: [id])
+  user_id    Int?
+  User       User?    @relation(fields: [user_id], references: [id])
 }
