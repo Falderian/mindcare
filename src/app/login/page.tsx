@@ -1,109 +1,128 @@
-"use client";
-import React, { useState } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  Typography,
-  Divider,
-  message,
-} from "antd";
-import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import styles from "./login.module.scss";
+'use client';
+import { Box, Button, Divider, Fade, IconButton, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import AuthIllustrationV1Wrapper from '../../components/layouts/AuthIllustrationV1Wrapper';
+import { AppLogo } from '../../components/AppLogo';
+import axios from 'axios';
+import { useNotify } from '../../hooks/useNotify';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Google } from '@mui/icons-material';
+import { getCookie, setCookie } from 'cookies-next';
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
 
-const { Title, Text } = Typography;
+type TForm = {
+  login: string;
+  password: string;
+};
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+  const { notifyPromise } = useNotify();
+  const { setUser } = useContext(AuthContext);
   const router = useRouter();
-
-  const onFinish = async (values: any) => {
-    setLoading(true);
-    try {
-      const response = await axios.post("/api/login", values);
-      message.success("Вход выполнен успешно!");
-      router.push("/dashboard");
-    } catch (error) {
-      message.error(
-        "Ошибка входа. Проверьте свои учетные данные и попробуйте снова."
-      );
-    } finally {
-      setLoading(false);
-    }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TForm>({ defaultValues: { login: 'test@test.com', password: 'test@test.com' } });
+  const submit = (data: TForm) => {
+    const promise = axios.post('/api/users/login', data).then(({ data }) => {
+      const { user, session } = data;
+      setCookie('sessionId', session.id, { expires: new Date(session.expires_at) });
+      setUser!(user);
+      router.push('consultations');
+    });
+    notifyPromise({ promise });
   };
 
   return (
-    <div className={styles.container}>
-      <Form
-        name="login"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        style={{ width: "30%" }}
-      >
-        <Title level={2} style={{ textAlign: "center" }}>
-          ВХОД
-        </Title>
-        <Text
-          type="secondary"
-          style={{
-            display: "block",
-            textAlign: "center",
-            marginBottom: "24px",
-          }}
-        >
-          Войдите в свою учетную запись
-        </Text>
-        <Form.Item
-          name="username"
-          rules={[
-            {
-              required: true,
-              message: "Пожалуйста, введите ваше имя пользователя.",
-            },
-          ]}
-        >
-          <Input prefix={<UserOutlined />} placeholder="Имя пользователя" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[
-            { required: true, message: "Пожалуйста, введите ваш пароль." },
-          ]}
-        >
-          <Input
-            prefix={<LockOutlined />}
-            type="password"
-            placeholder="Пароль"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Запомнить меня</Checkbox>
-          </Form.Item>
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit" block loading={loading}>
-            Войти
-          </Button>
-          <Button
-            onClick={() => router.push("register")}
-            block
-            loading={loading}
-            style={{ marginTop: 6 }}
+    <Fade in={true}>
+      <Stack height="100vh" width="100vw" display="flex" justifyContent="center" alignItems="center">
+        <AuthIllustrationV1Wrapper zIndex={2}>
+          <Paper
+            sx={{
+              paddingY: 2,
+              padding: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+            elevation={3}
           >
-            Регистрация
-          </Button>
-        </Form.Item>
-        <Divider>Войти с помощью</Divider>
-        <Button icon={<GoogleOutlined />} block style={{ marginBottom: "8px" }}>
-          Войти с Google
-        </Button>
-      </Form>
-    </div>
+            <AppLogo />
+            <Typography variant="h5" sx={{ mt: 2, mb: 1, fontWeight: 'bold', textAlign: 'center' }}>
+              Добро пожаловать! 👋🏻
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 3, textAlign: 'center', color: 'text.secondary' }}>
+              Пожалуйста, войдите в свою учетную запись
+            </Typography>
+            <Box
+              component="form"
+              display="flex"
+              gap={2}
+              flexDirection="column"
+              width="100%"
+              onSubmit={handleSubmit(submit)}
+            >
+              <Controller
+                name="login"
+                control={control}
+                rules={{ required: 'Логин обязателен для заполнения' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    value={field.value}
+                    variant="standard"
+                    label="Логин"
+                    fullWidth
+                    error={!!errors.login}
+                    helperText={errors.login ? errors.login.message : null}
+                  />
+                )}
+              />
+              <Controller
+                name="password"
+                control={control}
+                rules={{ required: 'Пароль обязателен для заполнения' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    value={field.value}
+                    variant="standard"
+                    type="password"
+                    label="Пароль"
+                    fullWidth
+                    error={!!errors.password}
+                    helperText={errors.password ? errors.password.message : null}
+                  />
+                )}
+              />
+              <Button type="submit" variant="contained" sx={{ fontWeight: 700 }}>
+                Войти
+              </Button>
+              <Typography color="secondary">
+                У вас нет аккаунта? <Link href="register">Зарегистрироваться</Link>
+              </Typography>
+              <Divider
+                sx={{
+                  '&::before, &::after': {
+                    borderColor: 'primary.light',
+                  },
+                }}
+              >
+                или
+              </Divider>
+              <Box display="flex" justifyContent="center">
+                <IconButton color="error" size="small">
+                  <Google />
+                </IconButton>
+              </Box>
+            </Box>
+          </Paper>
+        </AuthIllustrationV1Wrapper>
+      </Stack>
+    </Fade>
   );
 };
 

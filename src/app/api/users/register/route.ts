@@ -1,16 +1,21 @@
-// src/pages/api/register.ts
-import { NextApiRequest, NextApiResponse } from "next";
-import { Controller } from "../../../../db/controllers/Controller";
+import { NextRequest, NextResponse } from 'next/server';
+import { UsersController } from '../../../../server/controllers/UsersController';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method === "POST") {
-    const result = await Controller.Users.register(req.body);
-    res.status(result.status || 200).json(result);
+const registerHandler = async (req: NextRequest) => {
+  if (req.method === 'POST') {
+    try {
+      const result = await UsersController.register(req);
+      return NextResponse.json(result, { status: 201 });
+    } catch (error: any) {
+      console.error(error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
   } else {
-    res.setHeader("Allow", ["POST"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    return new NextResponse(`Метод ${req.method} не поддерживается`, {
+      status: 405,
+      headers: { Allow: 'POST' },
+    });
   }
-}
+};
+
+export { registerHandler as POST };
