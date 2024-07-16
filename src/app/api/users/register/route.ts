@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { UsersController } from '../../../../server/controllers/UsersController';
 
-const registerHandler = async (req: NextRequest) => {
+const registerHandler = async (req: Request) => {
   if (req.method === 'POST') {
     try {
       const result = await UsersController.register(req);

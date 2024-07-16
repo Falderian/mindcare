@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UsersController } from '../../../../server/controllers/UsersController';
 
-const handler = async (req: NextRequest) => {
+const handler = async (req: Request) => {
   switch (req.method) {
     case 'POST':
       try {
@@ -11,10 +11,6 @@ const handler = async (req: NextRequest) => {
         console.error(error);
         return NextResponse.json({ error: error.toString() }, { status: 500 });
       }
-    case 'GET': {
-      const sessionId = req.cookies.get('sessionId')?.value;
-      return NextResponse.json(sessionId, { status: 201 });
-    }
     default:
       return new NextResponse(`Метод ${req.method} не поддерживается`, {
         status: 405,
