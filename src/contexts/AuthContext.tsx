@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const checkSessionAndFetchUser = async () => {
       const sessionExists = getCookie('sessionId');
 
-      if (!sessionExists || !user) {
+      if (!sessionExists) {
         router.push('login');
       } else {
         try {

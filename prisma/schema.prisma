@@ -27,7 +27,7 @@ model Session {
   user       User     @relation(fields: [user_id], references: [id])
   user_id    Int      @unique
   created_at DateTime @default(now())
-  expires_at DateTime @default(dbgenerated("now() + interval '1 day'"))
+  expires_at DateTime @default(dbgenerated("NOW() + interval '1 day'"))
 }
 
 model Consultation {

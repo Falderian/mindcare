@@ -8,7 +8,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Google } from '@mui/icons-material';
-import { setCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -26,7 +26,6 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<TForm>({ defaultValues: { login: 'test@test.com', password: 'test@test.com' } });
-
   const submit = (data: TForm) => {
     const promise = axios.post('/api/users/login', data).then(({ data }) => {
       const { user, session } = data;
