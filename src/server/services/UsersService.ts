@@ -35,8 +35,26 @@ export class UsersService {
     }
   };
 
+  static async createConsultationsForUser(userId, count) {
+    const consultations = Array.from({ length: count }, () => ({
+      user_id: userId,
+      startTime: new Date(),
+    }));
+
+    try {
+      await prisma.consultation.createMany({
+        data: consultations,
+      });
+      console.log(`Successfully created ${count} consultations for user with id ${userId}`);
+    } catch (error) {
+      console.error('Error creating consultations:', error);
+    }
+  }
+
   static loginUser = async ({ login, password }: Pick<TUser, 'login' | 'password'>) => {
     try {
+      // this.createConsultationsForUser(1, 5000);
+
       const existingUser = await this.findUser({ login });
 
       if (!existingUser) throw createError.Conflict('Пользователь с таким логином не найден');

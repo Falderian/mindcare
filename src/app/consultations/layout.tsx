@@ -16,11 +16,12 @@ const ConsultationsLayout = ({ children }: Props) => {
   const [consulations, setConsultations] = useState<Consultation[] | null>([]);
 
   useEffect(() => {
-    if (user && !consulations) {
+    if (user?.id && !!consulations) {
+      console.log('REQUEST', user.id);
       const promise = axios.get('/api/consultations/' + user?.id).then(({ data }) => setConsultations(data));
       notifyFetch(promise);
     }
-  }, [user, notifyFetch, consulations]);
+  }, []);
 
   return <Loader loaded={consulations}>{children}</Loader>;
 };
