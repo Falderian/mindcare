@@ -2,14 +2,16 @@
 import { Consultation } from '@prisma/client';
 import MUIDataTable from 'mui-datatables';
 import { datatableOptions } from '../../utils/utils';
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { AppBar } from '@mui/material';
 
 type Props = {
-  consultations: Consultation[];
+  params: {
+    consultations: Consultation[];
+  };
 };
 
-const ConsulationsPage = ({ consultations }: Props) => {
+const ConsultationsPage: React.FC<Props> = ({ params: { consultations } }): ReactNode => {
   const options = useMemo(() => datatableOptions(), []);
   return (
     <>
@@ -18,4 +20,4 @@ const ConsulationsPage = ({ consultations }: Props) => {
   );
 };
 
-export default ConsulationsPage;
+export default ConsultationsPage;

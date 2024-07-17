@@ -10,7 +10,7 @@ type Props = {
   children: ReactNode;
 };
 
-const ConsultationLayout = ({ children }: Props) => {
+const ConsultationsLayout = ({ children }: Props) => {
   const { user } = useAuth();
   const { notifyFetch } = useNotify();
   const [consulations, setConsultations] = useState<Consultation[] | null>([]);
@@ -25,4 +25,4 @@ const ConsultationLayout = ({ children }: Props) => {
   return <Loader loaded={consulations}>{children}</Loader>;
 };
 
-export default ConsultationLayout;
+export default ConsultationsLayout;
