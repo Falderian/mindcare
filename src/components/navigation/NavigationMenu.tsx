@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ListItemText, List, Drawer, ListItemButton, Collapse, Box } from '@mui/material';
+import { ListItemText, List, Drawer, ListItemButton, Collapse, Box, styled } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { MenuItems } from './MenuItems';
 import IconifyIcon from '../Icon';
@@ -40,7 +40,7 @@ export const NavigationMenu: React.FC = () => {
                 backgroundColor: isActive(item.path) ? 'primary.main' : 'transparent',
                 color: isActive(item.path) ? 'primary.contrastText' : 'inherit',
                 '&:hover': {
-                  backgroundColor: isActive(item.path) ? 'primary.main' : '', // Keep the background the same if active
+                  backgroundColor: isActive(item.path) ? 'primary.main' : '',
                 },
               }}
             >
@@ -74,8 +74,8 @@ export const NavigationMenu: React.FC = () => {
   };
 
   return (
-    <Drawer variant="permanent" sx={{ width: '20%' }}>
-      <List>{renderMenuItems(MenuItems)}</List>
+    <Drawer variant="permanent" sx={{ paddingX: 13 }}>
+      <List sx={{ position: 'relative' }}>{renderMenuItems(MenuItems)}</List>
     </Drawer>
   );
 };

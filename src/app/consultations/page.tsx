@@ -15,7 +15,6 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     if (user?.id) {
-      console.log('REQUEST', user.id);
       const promise = axios.get('/api/consultations/' + user.id).then(({ data }) => setConsultations(data));
       notifyFetch(promise);
     }
