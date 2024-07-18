@@ -11,7 +11,7 @@ import { Loader } from '../../components/Loader';
 const Page: React.FC = () => {
   const { user } = useAuth();
   const { notifyFetch } = useNotify();
-  const [consultations, setConsultations] = useState<Consultation[] | null>([]);
+  const [consultations, setConsultations] = useState<Consultation[] | null>(null);
 
   useEffect(() => {
     if (user?.id) {
@@ -28,7 +28,7 @@ const Page: React.FC = () => {
         name: 'id',
         label: 'ID',
         options: {
-          filter: true,
+          filter: false,
           sort: true,
         },
       },
@@ -67,19 +67,11 @@ const Page: React.FC = () => {
           customBodyRender: (value: string) => new Date(value).toLocaleString('ru-RU'),
         },
       },
-      {
-        name: 'user_id',
-        label: 'ID пользователя',
-        options: {
-          filter: true,
-          sort: true,
-        },
-      },
     ],
     []
   );
   return (
-    <Loader loaded={consultations}>
+    <Loader loaded={Boolean(consultations)}>
       <MUIDataTable columns={consultationColumns} data={consultations ?? []} title={'Консультации'} options={options} />
     </Loader>
   );
