@@ -46,7 +46,8 @@ const datatableOptions = (): MUIDataTableOptions => {
     sortOrder: { name: 'id', direction: 'desc' },
     textLabels: textLabelsDatatables(),
     draggableColumns: { enabled: true, transitionTime: 300 },
-    tableBodyMaxHeight: '60dvh',
+    tableBodyHeight: '70dvh',
+    elevation: 0,
   };
 };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ListItemText, List, Drawer, ListItemButton, Collapse, Box, styled } from '@mui/material';
+import { ListItemText, List, Drawer, ListItemButton, Collapse, Box, styled, Stack, Paper } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { MenuItems } from './MenuItems';
 import IconifyIcon from '../Icon';
@@ -74,8 +74,8 @@ export const NavigationMenu: React.FC = () => {
   };
 
   return (
-    <Drawer variant="permanent" sx={{ paddingX: 13 }}>
-      <List sx={{ position: 'relative' }}>{renderMenuItems(MenuItems)}</List>
-    </Drawer>
+    <Paper elevation={3}>
+      <List sx={{ width: 'fit-content', height: '100dvh' }}>{renderMenuItems(MenuItems)}</List>
+    </Paper>
   );
 };

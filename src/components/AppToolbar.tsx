@@ -8,14 +8,12 @@ type Props = {
 
 export const AppToolbar = ({ toggleThemeMode, themeMode }: Props) => {
   return (
-    <AppBar position="relative">
+    <Paper elevation={3}>
       <Toolbar>
-        <Paper elevation={3}>
-          <IconButton onClick={toggleThemeMode} color="inherit">
-            {themeMode === 'dark' ? <LightModeOutlined /> : <DarkModeOutlined />}
-          </IconButton>
-        </Paper>
+        <IconButton onClick={toggleThemeMode} color="inherit">
+          {themeMode === 'dark' ? <LightModeOutlined /> : <DarkModeOutlined />}
+        </IconButton>
       </Toolbar>
-    </AppBar>
+    </Paper>
   );
 };

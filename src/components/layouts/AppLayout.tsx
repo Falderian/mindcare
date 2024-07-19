@@ -1,7 +1,7 @@
 import { usePathname } from 'next/navigation';
 import { AppToolbar } from '../AppToolbar';
 import { NavigationMenu } from '../navigation/NavigationMenu';
-import { ThemeProvider, Grid } from '@mui/material';
+import { ThemeProvider, Grid, CssBaseline, GlobalStyles, Box, Stack, Paper } from '@mui/material';
 import { PaletteMode } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { createMyTheme } from '../../configs/theme';
@@ -15,7 +15,7 @@ export const AppLayout = ({ children }: Props) => {
   const pathname = usePathname();
 
   const toggleMode = () => {
-    setMode((prevMode: PaletteMode) => (prevMode === 'light' ? 'dark' : 'light') as PaletteMode);
+    setMode((prevMode: PaletteMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
 
   const theme = createMyTheme(mode);
@@ -25,21 +25,25 @@ export const AppLayout = ({ children }: Props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container style={{ height: '100vh' }}>
-        {showNavigationMenu && (
-          <Grid item xs={1.5}>
-            <NavigationMenu />
-          </Grid>
-        )}
-        <Grid item xs={showNavigationMenu ? 10.5 : 12} padding={2} paddingRight={6}>
-          <Grid item xs={12} style={{ display: showNavigationMenu ? 'block' : 'none' }}>
-            <AppToolbar toggleThemeMode={toggleMode} themeMode={mode} />
-          </Grid>
-          <Grid item xs={12} height={'80%'} mt={4}>
-            {children}
-          </Grid>
-        </Grid>
-      </Grid>
+      <CssBaseline />
+      <GlobalStyles
+        styles={{
+          body: {
+            backgroundColor: theme.palette.background.default,
+            color: theme.palette.text.primary,
+          },
+          a: {
+            color: theme.palette.primary.main,
+          },
+        }}
+      />
+      <Stack flexDirection="row">
+        {showNavigationMenu && <NavigationMenu />}
+        <Stack width="100%" paddingX={showNavigationMenu ? 8 : 0} paddingTop={showNavigationMenu ? 2 : 0} gap={4}>
+          {showNavigationMenu && <AppToolbar toggleThemeMode={toggleMode} themeMode={mode} />}
+          <Paper elevation={3}>{children}</Paper>
+        </Stack>
+      </Stack>
     </ThemeProvider>
   );
 };
