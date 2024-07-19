@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const sessionId = getCookie('sessionId');
     if (sessionId && !user) {
       notifyFetch(axios.get('api/users/login/').then(({ data }) => setUser(data)));
-      router.back();
     } else router.push('login');
   }, [router]);
 
