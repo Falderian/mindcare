@@ -1,5 +1,5 @@
 export const MenuItems = [
-  { name: 'Планировщик', path: '', icon: 'ant-design:schedule-outlined' },
+  { name: 'Календарь', path: 'calendar', icon: 'ant-design:schedule-outlined' },
   {
     name: 'documentation',
     path: '',

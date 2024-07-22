@@ -8,7 +8,7 @@ import { useNotify } from '../../hooks/useNotify';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Google } from '@mui/icons-material';
-import { getCookie, setCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -31,7 +31,7 @@ const LoginPage = () => {
       const { user, session } = data;
       setCookie('sessionId', session.id, { expires: new Date(session.expires_at) });
       setUser!(user);
-      router.push('consultations');
+      router.push('calendar');
     });
     notifyPromise({ promise });
   };
