@@ -8,7 +8,9 @@ export class SessionService {
     const id = randomUUID();
 
     const session = await this.findSession(user_id);
-    if (session) return session;
+    if (session && session?.expires_at > new Date()) return session;
+
+    await prisma.session.delete({ where: { user_id } });
 
     prisma.user.update({
       where: { id: user_id },

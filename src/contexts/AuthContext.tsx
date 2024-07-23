@@ -18,9 +18,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const sessionId = getCookie('sessionId');
-    if (sessionId && !user) {
-      notifyFetch(axios.get('api/users/login/').then(({ data }) => setUser(data)));
-    } else router.push('login');
+    console.log(sessionId, user);
+    if (!sessionId && !user) {
+      router.push('login');
+    } else notifyFetch(axios.get('api/users/login/').then(({ data }) => setUser(data)));
   }, [router]);
 
   return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;
