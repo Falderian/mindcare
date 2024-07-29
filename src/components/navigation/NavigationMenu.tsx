@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ListItemText, List, Drawer, ListItemButton, Collapse, Box, styled, Stack, Paper } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { MenuItems } from './MenuItems';
 import IconifyIcon from '../Icon';
 import { AppLogo } from '../AppLogo';
+import { useBreakpoints } from '../../hooks/useBreakpoints';
 
 type MenuItemType = (typeof MenuItems)[number];
+type Props = {
+  open: boolean;
+  toggleMenu: () => void;
+};
 
-export const NavigationMenu: React.FC = () => {
-  const [open, setOpen] = useState(false);
+export const NavigationMenu = ({ open, toggleMenu }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-
-  const handleClick = (item: MenuItemType) => {
-    if (item.children) {
-      setOpen(!open);
-    } else {
-      router.push(item.path);
-    }
-  };
+  const { isTablet } = useBreakpoints();
 
   const isActive = (path: string) => pathname === '/' + path;
 
@@ -32,7 +29,7 @@ export const NavigationMenu: React.FC = () => {
         {menuItems.map((item, index) => (
           <Box key={index}>
             <ListItemButton
-              onClick={() => handleClick(item)}
+              onClick={() => router.push(item.path)}
               sx={{
                 paddingLeft: 4,
                 gap: 0.5,
@@ -74,8 +71,14 @@ export const NavigationMenu: React.FC = () => {
   };
 
   return (
-    <Paper elevation={3}>
+    <Drawer
+      variant={isTablet ? 'temporary' : 'permanent'}
+      elevation={3}
+      sx={{ position: 'relative' }}
+      open={open}
+      onClose={toggleMenu}
+    >
       <List sx={{ width: 'fit-content', height: '100dvh' }}>{renderMenuItems(MenuItems)}</List>
-    </Paper>
+    </Drawer>
   );
 };

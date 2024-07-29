@@ -12,12 +12,16 @@ import { styled, Typography, Stack } from '@mui/material';
 import { EventContentArg, CalendarOptions } from '@fullcalendar/core/index.js';
 
 const CalendarWrapper = styled('div')(({ theme }) => ({
-  '& .fc-scrollgrid': { borderColor: theme.palette.divider },
+  '& .fc-scrollgrid, & .fc-scrollgrid-section > *, & .fc-daygrid-day, & .fc-daygrid-day-frame, & .fc .fc-col-header-cell, & .fc-view, & .fc-timeline-header':
+    {
+      borderColor: `${theme.palette.divider} !important`,
+    },
   '& .fc .fc-button': {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     transition: 'background-color 0.3s ease',
     borderRadius: '4px',
+    borderColor: `${theme.palette.divider} !important`,
   },
   '& .fc .fc-button-active': {
     backgroundColor: `${theme.palette.primary.light} !important`,
@@ -37,13 +41,18 @@ const CalendarWrapper = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.secondary.contrastText,
     padding: 2,
+    borderColor: `${theme.palette.divider} !important`,
   },
   '& .fc .fc-col-header-cell': {
     backgroundColor: theme.palette.background.paper,
     borderColor: theme.palette.divider,
   },
-  '& .fc-view': { borderColor: theme.palette.divider },
-
+  '& .fc-view': {
+    borderColor: theme.palette.divider,
+  },
+  '& .fc-timeline-header': {
+    borderColor: theme.palette.divider,
+  },
   '& .fc-day-today': {
     backgroundColor: 'rgba(255, 255, 255, 0.1) !important',
   },
@@ -54,11 +63,12 @@ const CalendarWrapper = styled('div')(({ theme }) => ({
     color: theme.palette.text.primary,
   },
   '& .fc-day-past': {
-    backgroundColor: theme.palette.action.disabledBackground,
+    opacity: 0.5,
   },
   '& .fc-day-future': {
     backgroundColor: theme.palette.background.default,
   },
+  '& .fc-theme-standard td, th': { borderColor: theme.palette.divider },
   '@media (max-width: 700px)': {
     '& .fc-toolbar': {
       flexDirection: 'column',
@@ -73,7 +83,9 @@ const eventContent = (eventInfo: EventContentArg) => {
   return (
     <Stack spacing={0.5} direction="column" alignItems="flex-start" sx={{ p: 0.5 }}>
       <Typography variant="caption">{eventInfo.timeText}</Typography>
-      <Typography variant="caption">{eventInfo.event.title}</Typography>
+      <Typography variant="caption" textOverflow="clip">
+        {eventInfo.event.title}
+      </Typography>
     </Stack>
   );
 };
