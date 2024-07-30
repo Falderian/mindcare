@@ -13,7 +13,7 @@ type Props = {
 
 export const AppLayout = ({ children }: Props) => {
   const [mode, setMode] = useState<PaletteMode>('light');
-  const [openMenu, setOpenMenu] = useState(true);
+  const [openMenu, setOpenMenu] = useState(false);
   const { isTablet } = useBreakpoints();
 
   const pathname = usePathname();
@@ -46,7 +46,7 @@ export const AppLayout = ({ children }: Props) => {
         <NavigationMenu open={openMenu} toggleMenu={toggleMenu} />
         <Stack
           width="100%"
-          px={showNavigationMenu ? 2 : 0}
+          px={showNavigationMenu ? 3 : 0}
           pt={showNavigationMenu ? 2 : 0}
           gap={4}
           pl={!isTablet ? 30 : 2}

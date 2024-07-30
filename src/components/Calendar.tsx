@@ -81,11 +81,9 @@ const CalendarWrapper = styled('div')(({ theme }) => ({
 
 const eventContent = (eventInfo: EventContentArg) => {
   return (
-    <Stack spacing={0.5} direction="column" alignItems="flex-start" sx={{ p: 0.5 }}>
+    <Stack direction="column" alignItems="flex-start">
       <Typography variant="caption">{eventInfo.timeText}</Typography>
-      <Typography variant="caption" textOverflow="clip">
-        {eventInfo.event.title}
-      </Typography>
+      <Typography variant="caption">{eventInfo.event.title}</Typography>
     </Stack>
   );
 };
