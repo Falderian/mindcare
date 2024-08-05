@@ -43,13 +43,13 @@ export const AppLayout = ({ children }: Props) => {
         }}
       />
       <Stack flexDirection="row">
-        <NavigationMenu open={openMenu} toggleMenu={toggleMenu} />
+        {showNavigationMenu && <NavigationMenu open={openMenu} toggleMenu={toggleMenu} />}
         <Stack
           width="100%"
           px={showNavigationMenu ? 3 : 0}
           pt={showNavigationMenu ? 2 : 0}
           gap={4}
-          pl={!isTablet ? 30 : 2}
+          pl={showNavigationMenu && !isTablet ? 30 : 0}
         >
           {showNavigationMenu && <AppToolbar toggleThemeMode={toggleMode} themeMode={mode} toggleMenu={toggleMenu} />}
           <Paper elevation={3}>{children}</Paper>
